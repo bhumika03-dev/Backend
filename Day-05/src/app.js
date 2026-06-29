@@ -23,7 +23,7 @@ app.delete("/notes/:index",(req,res)=>{
     res.status(200).json({
         message:"Note deleted successfully"
     })
-
+    console.log("deleted succesfully")
     
 })
 
