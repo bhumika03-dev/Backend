@@ -1,74 +1,97 @@
-const postModel=require("../models/post.model")
+const postModel = require("../models/post.model");
 const ImageKit = require("@imagekit/nodejs");
 const { toFile } = ImageKit;
-
-
+const jwt = require("jsonwebtoken");
 
 const imageKit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
 });
 
-async function CreatePostController(req,res){
+async function CreatePostController(req, res) {
     try {
 
-        if(!req.file){
+        // Check image
+        if (!req.file) {
             return res.status(400).json({
-                message:"Image is required"
-            });
-        }
-        console.log({
-    originalname: req.file?.originalname,
-    mimetype: req.file?.mimetype,
-    size: req.file?.size,
-    buffer: !!req.file?.buffer
-});
-        // Try upload using ImageKit's toFile helper first, fall back to base64 data URI on 500 errors
-        let file;
-        try {
-            file = await imageKit.files.upload({
-                file: await toFile(req.file.buffer, req.file.originalname),
-                fileName: req.file.originalname,
-            });
-        } catch (e) {
-            console.warn("Primary ImageKit upload failed, attempting base64 fallback", e?.status || e?.message);
-            const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
-            file = await imageKit.files.upload({
-                file: base64,
-                fileName: req.file.originalname,
+                message: "Image is required"
             });
         }
 
-        res.status(201).json({
-            message:"Image uploaded successfully",
-            url:file.url,
-            fileId:file.fileId
+        console.log({
+            originalname: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+            buffer: !!req.file.buffer
+        });
+
+        // Check token
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(401).json({
+                message: "Unauthorized. Token not provided"
+            });
+        }
+
+        // Verify token
+        let decoded=null;
+        try{
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+        }
+        catch (err){
+            return res.status(401).json({
+                message:"User not authorized"
+            })
+        }
+
+
+        // Upload image to ImageKit
+        let uploadedFile;
+
+        try {
+
+            uploadedFile = await imageKit.files.upload({
+                file: await toFile(req.file.buffer, req.file.originalname),
+                fileName: req.file.originalname
+            });
+
+        } catch (err) {
+
+            console.log("Primary upload failed. Trying Base64 upload...");
+
+            const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+
+            uploadedFile = await imageKit.upload({
+                file: base64,
+                fileName: req.file.originalname
+            });
+        }
+
+        // Save post in MongoDB
+        const post = await postModel.create({
+            caption: req.body.caption,
+            imgUrl: uploadedFile.url,
+            user: decoded.id
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Post created successfully",
+            post
         });
 
     } catch (err) {
-        console.error("ImageKit upload error:", err);
-        // log non-enumerable properties as well for SDK errors
-        try {
-            console.error("Error details:", JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
-        } catch (e) {
-            console.error("Could not stringify error details", e);
-        }
 
-        const details = {
-            message: err.message,
-            status: err.status,
-            headers: err.headers,
-            error: err.error,
-        };
+        console.error("Error:", err);
 
-        res.status(500).json({
+        return res.status(500).json({
+            success: false,
             message: "Upload failed",
-            error: details,
+            error: err.message
         });
     }
 }
 
-module.exports={
-    CreatePostController
-}
+module.exports = CreatePostController;
