@@ -118,7 +118,24 @@ async function getPostController(req,res){
     })
 }
 
+async function getPostDetailsController(req,res){
+    const token=req.cookies.token;
 
+    let decoded=null;
+    try{
+        decoded=jwt.verify(token,process.env.JWT_SECRET);
+    }
+    catch(err){
+        return res.status(401).json({
+            message:"Token invalid"
+        })
+    }
+
+    const userID=decoded.id;
+    const postID=req.params.id;
+
+    
+}
 
 module.exports = {
     CreatePostController,
