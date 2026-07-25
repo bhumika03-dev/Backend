@@ -95,19 +95,8 @@ async function CreatePostController(req, res) {
 }
 
 async function getPostController(req,res){
-    const token = req.cookies.token;
-     
-    let decoded=null;
-    try{
-        decoded=jwt.verify(token,process.env.JWT_SECRET);
-    }
-    catch(err){
-        return res.status(401).json({
-            message:"Token invalid"
-        })
-    }
-
-    const userId=decoded.id;
+   
+    const userId=req.user.id;
     const posts=await postModel.find({
         user:userId
     })
@@ -119,25 +108,34 @@ async function getPostController(req,res){
 }
 
 async function getPostDetailsController(req,res){
-    const token=req.cookies.token;
+   
 
-    let decoded=null;
-    try{
-        decoded=jwt.verify(token,process.env.JWT_SECRET);
-    }
-    catch(err){
-        return res.status(401).json({
-            message:"Token invalid"
+    const userID=req.user.id;
+    const postID=req.params.id;
+
+    const post=await postModel.findById(postID);
+    
+    if(!post){
+        return res.status(404).json({
+            message:"Post not found"
         })
     }
 
-    const userID=decoded.id;
-    const postID=req.params.id;
+    const isValidUser=post.user.toString()===userID;
 
-    
+    if(!isValidUser){
+        return res.status(403).json({
+            message:"Forbidden Content"
+        })
+    }
+    return res.status(200).json({
+        message:"Post created",
+        post
+    })
 }
 
 module.exports = {
     CreatePostController,
-    getPostController
+    getPostController,
+    getPostDetailsController
 };
