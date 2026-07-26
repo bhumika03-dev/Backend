@@ -7,6 +7,8 @@ const identifyingUser=require("../middlewares/auth.middleware")
 
 
 userRouter.post("/follow/:username",identifyingUser,userController.followUserController)
+userRouter.post("/unfollow/:username",identifyingUser,userController.unfollowUserController)
+
 
 
 

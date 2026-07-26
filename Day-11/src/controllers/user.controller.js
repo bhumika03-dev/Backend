@@ -41,6 +41,27 @@ async function followUserController(req,res){
     })
 }
 
+async function unfollowUserController(req,res){
+    const followerUsername=req.user.username;
+    const followingUsername=req.params.username;
+
+    const isFollowing=await followModel.findOne({
+        follower:followerUsername,
+        following:followingUsername
+    })
+
+    if(!isFollowing){
+        res.status(404).json({
+            message:`user is not following`
+        })
+    }
+     await followModel.findByIdAndDelete(isFollowing._id)
+
+      res.status(200).json({
+            message:`You have unfollowed ${followingUsername}`
+        })
+}
 module.exports={
-    followUserController
+    followUserController,
+    unfollowUserController
 };
