@@ -42,7 +42,7 @@ const isUserAlreadyExists= await userModel.findOne({
      profile_image
  })
 
- const token=jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"3d"})
+ const token=jwt.sign({id:user._id, username:user.username},process.env.JWT_SECRET,{expiresIn:"3d"})
 
  res.cookie("token",token);
 
@@ -79,7 +79,7 @@ async function loginController(req,res){
   
   const isPasswordValid= await bcrypt.compare(password,user.password)
 
-   isPasswordValid=hashedPd==user.password
+  
 
   if(!isPasswordValid)
 {
@@ -89,7 +89,8 @@ async function loginController(req,res){
 
    const token=jwt.sign(
     {
-        id:user._id
+        id:user._id,
+        username:user.username
     },process.env.JWT_SECRET,
     {
         expiresIn:"3d"
