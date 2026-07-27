@@ -134,8 +134,28 @@ async function getPostDetailsController(req,res){
     })
 }
 
+async function likesPostController(req,res){
+    const username=req.user.username;
+    const postID=req.params.id;
+
+    const post= await postModel.findById(postID)
+    if(!post){
+        return res.status(404).json({
+            message:"Post not found"
+        })
+    }
+    const like=await likeModel.create({
+        post:postID,
+        user:username
+    })
+    res.status(200).json({
+        message:"Post liked successfully",
+        like
+    })
+}
 module.exports = {
     CreatePostController,
     getPostController,
-    getPostDetailsController
+    getPostDetailsController,
+    likesPostController
 };
