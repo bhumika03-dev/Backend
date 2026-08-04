@@ -1,8 +1,24 @@
-import React from 'react'
+import React,{useState} from 'react'
 import '../styles/form.scss'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 
 const Login = () => {
+
+  const [username,setUsername] = useState("")
+  const [password,setPassword] = useState("")
+
+  function handleSubmit(e){
+    e.preventDefault()
+    axios.post("http://localhost:3000/api/auth/login",{
+      username,
+      password
+    },{
+      withCredentials:true
+    }.withCredentials(
+      
+    ))
+  }
   return (
     <main>
       <div className="form-container">
