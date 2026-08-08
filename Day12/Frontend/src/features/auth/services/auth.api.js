@@ -34,3 +34,18 @@ export async function login(username,password){
      throw error;
    }
 }
+
+export async function getMe(){
+   try{
+     const response = await api.post("/get-me",{
+      
+     },{
+       withCredentials:true
+     });
+     return response.data;
+   } 
+   catch (error) {
+     console.error("Error fetching user data:", error);
+     throw error;
+   }
+}
