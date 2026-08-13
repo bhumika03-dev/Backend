@@ -28,8 +28,11 @@ const isUserAlreadyExists= await userModel.findOne({
     ]
 })
  if(isUserAlreadyExists){
-    return res.status(409).json(
-        {message:"User with this username or email already exists"+ isUserAlreadyExists.email==email?"Email already exists":"Username already exists"})
+    const duplicateField = isUserAlreadyExists.email === email ? "Email" : "Username";
+
+    return res.status(409).json({
+        message: `${duplicateField} already exists`
+    })
  }
 
  const hashedPd= await bcrypt.hash(password,10)
@@ -111,7 +114,21 @@ async function loginController(req,res){
 
 }
 
+async function getMeController(req,res){
+   const userId=req.user.id;
+   const user= await userModel.findById(userId)
+     res.status(200).json({
+        user:{
+            username:user.username,
+            email:user.email,
+            bio:user.bio,
+            profile_image:user.profile_image
+        }
+     })
+   
+}
 module.exports={
     registerController,
-    loginController
+    loginController,
+    getMeController
 }

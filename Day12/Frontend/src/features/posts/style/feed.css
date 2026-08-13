@@ -1,0 +1,61 @@
+.feedpage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.feedpage .feed {
+  max-width: 350px;
+  width: 100%;
+  background-color: aquamarine;
+}
+.feedpage .posts {
+  width: 100%;
+}
+.feedpage .post {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: rgb(55, 0, 255);
+  padding-inline: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.feedpage .post .user {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.feedpage .post .user .img-wrapper {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(198, 53, 53, 0.1);
+  background: conic-gradient(red, green, orange) border-box;
+}
+.feedpage .post .user img {
+  width: 2rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+.feedpage .post .icons {
+  display: flex;
+  justify-content: space-between;
+}
+.feedpage .post .icons svg {
+  width: 1rem;
+  aspect-ratio: 1/1;
+  color: white;
+}
+.feedpage .post .icons button {
+  background-color: transparent;
+  border: none;
+}
+.feedpage .post .icons .left {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+.feedpage .post img {
+  width: 100%;
+}/*# sourceMappingURL=feed.css.map */

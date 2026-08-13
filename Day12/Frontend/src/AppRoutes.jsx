@@ -1,16 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
-
+import Feed from '../src/features/auth/posts/pages/Feed'
 function AppRoutes() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<h1>Welcome to the App</h1>} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-            </Routes>
-        </BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Feed/>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
     )
 }
 

@@ -10,9 +10,11 @@ const handleLogin=async(username,password)=>{
     try{
         const response = await login(username,password);
         setUser(response.user);
+        return response;
     }
     catch(err){
         console.error("Login failed:", err);
+        throw err;
     }
     finally{
         setLoading(false);
@@ -24,9 +26,11 @@ const handleRegister=async(username,email,password)=>{
     try{
         const response = await register(username,email,password);
         setUser(response.user);
+        return response;
     }
     catch(err){
         console.error("Registration failed:", err);
+        throw err;
     }
     finally{
         setLoading(false);

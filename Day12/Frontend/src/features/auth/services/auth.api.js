@@ -10,8 +10,6 @@ export async function register(username,email,password){
        username,
        email,
        password
-     },{
-       withCredentials:true
      });
      return response.data;
    } catch (error) {
@@ -25,8 +23,6 @@ export async function login(username,password){
      const response = await api.post("/login",{
        username,
        password
-     },{
-       withCredentials:true
      });
      return response.data;
    } catch (error) {
@@ -39,8 +35,6 @@ export async function getMe(){
    try{
      const response = await api.post("/get-me",{
       
-     },{
-       withCredentials:true
      });
      return response.data;
    } 

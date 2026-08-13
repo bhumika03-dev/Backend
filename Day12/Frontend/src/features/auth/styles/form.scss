@@ -8,6 +8,7 @@ main{
 .form-container{
     height:fit-content;
     min-width:300px;
+    color:whitesmoke;
 
     display:flex;
     flex-direction:column;
@@ -36,5 +37,8 @@ main{
             color:rgb(76, 129, 175);
             cursor:pointer;
             text-decoration:underline;
+        }
+     .form-error{
+            color:#ffb4b4;
         }
 }

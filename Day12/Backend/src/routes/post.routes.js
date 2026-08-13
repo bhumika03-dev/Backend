@@ -23,4 +23,11 @@ postRouter.post(
 postRouter.get("/getposts",identifyingUser,postController.getPostController);
 postRouter.get("/details/:postID",identifyingUser, postController.getPostDetailsController);
 postRouter.get("/posts/like/:like",identifyingUser, postController.likesPostController);
+/**
+ * @route GET /api/posts/feed
+ * @description get all the post created in DB
+ * @access private
+ */
+
+postRouter.get("/feed",identifyingUser,postController.getFeedController)
 module.exports = postRouter;
