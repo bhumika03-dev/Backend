@@ -11,16 +11,12 @@ const api=axios.create({
 
 export async function getFeed(){
     try{
-        const response= await api.get("/getFeed",{
-            caption,
-            imageUrl,
-            User
-        });
+        const response= await api.get("/api/post/feed");
         return response.data
     }
-    catch{
+    catch (err){
         console.log("Error",err);
-        throw error;
+        throw err;
     }
    
 

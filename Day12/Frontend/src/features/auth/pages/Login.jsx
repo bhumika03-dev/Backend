@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import '../styles/form.scss'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useAuth} from '../hooks/useAuth'
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
   const [username,setUsername] = useState("")
   const [password,setPassword] = useState("")
   const [error,setError] = useState("")
-
+   const navigate = useNavigate();
   const {handleLogin, loading} = useAuth();
 
   async function handleSubmit(e){
@@ -18,6 +18,7 @@ const Login = () => {
     try {
       const res = await handleLogin(username, password)
       console.log(res);
+      navigate("/feed");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed")
     }
