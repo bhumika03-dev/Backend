@@ -15,7 +15,7 @@ const likeSchema=new mongoose.Schema({
     
 })
 
-likeSchema({
+likeSchema.index({
     post:1,
     user:1
 },{

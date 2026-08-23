@@ -22,9 +22,10 @@ postRouter.post(
 
 postRouter.get("/getposts",identifyingUser,postController.getPostController);
 postRouter.get("/details/:postID",identifyingUser, postController.getPostDetailsController);
-postRouter.get("/posts/like/:like",identifyingUser, postController.likesPostController);
+postRouter.get("/posts/like/:postID",identifyingUser, postController.likesPostController);
+postRouter.get("/posts/unlike/:postID",identifyingUser,postController.unlikePostController)
 /**
- * @route GET /api/posts/feed
+ * @route GET /api/post/feed
  * @description get all the post created in DB
  * @access private
  */

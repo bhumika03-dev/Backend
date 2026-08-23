@@ -6,9 +6,6 @@ const api=axios.create({
 })
 
 
-
-
-
 export async function getFeed(){
     try{
         const response= await api.get("/api/post/feed");
@@ -18,6 +15,25 @@ export async function getFeed(){
         console.log("Error",err);
         throw err;
     }
-   
-
     }
+
+export async function createPost(imageFile,caption){
+    const formData=new FormData()
+    formData.append("spiderman",imageFile)
+    formData.append('caption',caption)
+
+    const response=await api.post("/api/post/createpost",formData)
+
+    return response.data
+}
+
+export async function likePost(postID){
+    const response = await api.get("/api/post/posts/like/" + postID)
+    return response.data
+}
+
+export async function unLikePost(postID){
+    const response= await api.get("/api/post/posts/unlike/" + postID)
+    return response.data
+}
+
